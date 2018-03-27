@@ -9,9 +9,9 @@ anvil.gui_slots = "listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF]"
 
 function anvil.get_formspec()
 	return "size[8,8.5]"..
-			default.gui_bg..
-			default.gui_bg_img..
-			default.gui_slots..
+			anvil.gui_bg..
+			anvil.gui_bg_img..
+			anvil.gui_slots..
 			"list[context;src;1.5,1.5;1,1;]"..
 			"image[2.4,1.5;1,1;anvil_gui_plus.png]"..
 			"list[context;dst;3.3,1.5;1,1;]"..
