@@ -137,14 +137,16 @@ function anvil:set_output(inv, src, dst, name)
 				if recipe.type == "normal" then
 					local item_instances = 0
 					for i, v in ipairs(recipe.items) do
-						local is_group = string.find(v, "group:") ~= nil
-						if is_group then
-							local grp = string.sub(v, 7)
-							if minetest.get_item_group(dstname, grp) > 0 then
+						if v ~= "default:stick" then
+							local is_group = string.find(v, "group:") ~= nil
+							if is_group then
+								local grp = string.sub(v, 7)
+								if minetest.get_item_group(dstname, grp) > 0 then
+									item_instances = item_instances + 1
+								end
+							elseif v == dstname then
 								item_instances = item_instances + 1
 							end
-						elseif v == dstname then
-							item_instances = item_instances + 1
 						end
 					end
 
