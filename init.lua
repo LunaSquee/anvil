@@ -202,7 +202,7 @@ minetest.register_node("anvil:anvil", {
 	},
 	sunlight_propagates = true,
 	is_ground_content = false,
-	groups = {crumbly=1, falling_node = 1},
+	groups = {cracky=1, falling_node = 1},
 	tiles = {"anvil_node.png"},
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
