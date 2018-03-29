@@ -9,7 +9,7 @@ anvil.gui_bg_img = "background[5,5;1,1;anvil_gui_formbg.png;true]"
 anvil.gui_slots = "listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF]"
 
 function anvil.get_formspec()
-	-- What does this function do
+	-- Return the formspec for the GUI
 	return "size[8,8.5]"..
 			anvil.gui_bg..
 			anvil.gui_bg_img..
@@ -30,7 +30,7 @@ function anvil.get_formspec()
 end
 
 local function allow_metadata_inventory_put(pos, listname, index, stack, player)
-	-- What does this function do
+	-- Determine if the player can put an item in this slot
 	if minetest.is_protected(pos, player:get_player_name()) then
 		return 0
 	end
@@ -38,6 +38,7 @@ local function allow_metadata_inventory_put(pos, listname, index, stack, player)
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
 
+	-- Prevent placing into the result slot
 	if listname == "res" then
 		return 0
 	end
@@ -46,7 +47,7 @@ local function allow_metadata_inventory_put(pos, listname, index, stack, player)
 end
 
 local function allow_metadata_inventory_move(pos, from_list, from_index, to_list, to_index, count, player)
-	-- What does this function do
+	-- Determine if the player can move an item from_list to to_list
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
 	local stack = inv:get_stack(from_list, from_index)
@@ -54,7 +55,7 @@ local function allow_metadata_inventory_move(pos, from_list, from_index, to_list
 end
 
 local function allow_metadata_inventory_take(pos, listname, index, stack, player)
-	-- What does this function do
+	-- Determine if the player can take an item from this slot
 	if minetest.is_protected(pos, player:get_player_name()) then
 		return 0
 	end
@@ -63,7 +64,7 @@ local function allow_metadata_inventory_take(pos, listname, index, stack, player
 end
 
 local function take_from_stack(stack, count)
-	-- What does this function do
+	-- Take count from stack, return nil if the item count reaches 0
 	local newcount = stack:get_count() - count
 	if newcount <= 0 then
 		return nil
@@ -74,7 +75,7 @@ local function take_from_stack(stack, count)
 end
 
 function anvil.on_take(pos, listname, index, stack, player)
-	-- What does this function do
+	-- Handle inventory take event
 	local inv = minetest.get_meta(pos):get_inventory()
 	local src = inv:get_stack("src", 1)
 	local dst = inv:get_stack("dst", 1)
@@ -96,7 +97,7 @@ function anvil.on_take(pos, listname, index, stack, player)
 end
 
 function anvil:set_output(inv, src, dst, name)
-	-- What does this function do
+	-- Set the result slot to the appropriate item
 	local srcname = src:get_name()
 	local dstname = dst:get_name()
 	local result = nil
@@ -187,7 +188,7 @@ function anvil:set_output(inv, src, dst, name)
 end
 
 function anvil.on_put(pos, listname, _, stack)
-	-- What does this function do
+	-- Handle inventory put event
 	local inv = minetest.get_meta(pos):get_inventory()
 	local src = inv:get_stack("src", 1)
 	local dst = inv:get_stack("dst", 1)
@@ -196,7 +197,7 @@ function anvil.on_put(pos, listname, _, stack)
 end
 
 minetest.register_node("anvil:anvil", {
-	-- Creates the block called Anvil
+	-- Register the anvil block
 	description = "Anvil",
 	paramtype = "light",
 	paramtype2 = "facedir",
@@ -234,7 +235,7 @@ minetest.register_node("anvil:anvil", {
 })
 
 minetest.register_craft({
-	-- Creates the recipe for the anvil
+	-- Create the recipe for the anvil
 	output = "anvil:anvil",
 	recipe = {
 		{ "default:steelblock"  , "default:steelblock"  , "default:steelblock"  },
