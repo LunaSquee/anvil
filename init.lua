@@ -3,11 +3,13 @@ anvil = rawget(_G, "anvil") or {}
 local modpath = minetest.get_modpath("anvil")
 anvil.modpath = modpath
 
+-- Sets the colors and images for the anvil GUI when it is clicked
 anvil.gui_bg = "bgcolor[#080808BB;true]"
 anvil.gui_bg_img = "background[5,5;1,1;anvil_gui_formbg.png;true]"
 anvil.gui_slots = "listcolors[#00000069;#5A5A5A;#141318;#30434C;#FFF]"
 
 function anvil.get_formspec()
+	-- What does this function do
 	return "size[8,8.5]"..
 			anvil.gui_bg..
 			anvil.gui_bg_img..
@@ -28,6 +30,7 @@ function anvil.get_formspec()
 end
 
 local function allow_metadata_inventory_put(pos, listname, index, stack, player)
+	-- What does this function do
 	if minetest.is_protected(pos, player:get_player_name()) then
 		return 0
 	end
@@ -43,6 +46,7 @@ local function allow_metadata_inventory_put(pos, listname, index, stack, player)
 end
 
 local function allow_metadata_inventory_move(pos, from_list, from_index, to_list, to_index, count, player)
+	-- What does this function do
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
 	local stack = inv:get_stack(from_list, from_index)
@@ -50,6 +54,7 @@ local function allow_metadata_inventory_move(pos, from_list, from_index, to_list
 end
 
 local function allow_metadata_inventory_take(pos, listname, index, stack, player)
+	-- What does this function do
 	if minetest.is_protected(pos, player:get_player_name()) then
 		return 0
 	end
@@ -58,6 +63,7 @@ local function allow_metadata_inventory_take(pos, listname, index, stack, player
 end
 
 local function take_from_stack(stack, count)
+	-- What does this function do
 	local newcount = stack:get_count() - count
 	if newcount <= 0 then
 		return nil
@@ -68,6 +74,7 @@ local function take_from_stack(stack, count)
 end
 
 function anvil.on_take(pos, listname, index, stack, player)
+	-- What does this function do
 	local inv = minetest.get_meta(pos):get_inventory()
 	local src = inv:get_stack("src", 1)
 	local dst = inv:get_stack("dst", 1)
@@ -89,6 +96,7 @@ function anvil.on_take(pos, listname, index, stack, player)
 end
 
 function anvil:set_output(inv, src, dst, name)
+	-- What does this function do
 	local srcname = src:get_name()
 	local dstname = dst:get_name()
 	local result = nil
@@ -122,7 +130,7 @@ function anvil:set_output(inv, src, dst, name)
 		end
 	-- Tool repair by item
 	elseif src:get_wear() ~= 0 and dst:get_wear() == 0 then
-		local is_supported_tool = string.find(srcname, "axe") ~= nil or string.find(srcname, "sword") ~= nil or 
+		local is_supported_tool = string.find(srcname, "axe") ~= nil or string.find(srcname, "sword") ~= nil or
 			string.find(srcname, "shovel") ~= nil or string.find(srcname, "pick") ~= nil
 
 		local meta = src:get_meta()
@@ -179,6 +187,7 @@ function anvil:set_output(inv, src, dst, name)
 end
 
 function anvil.on_put(pos, listname, _, stack)
+	-- What does this function do
 	local inv = minetest.get_meta(pos):get_inventory()
 	local src = inv:get_stack("src", 1)
 	local dst = inv:get_stack("dst", 1)
@@ -187,6 +196,7 @@ function anvil.on_put(pos, listname, _, stack)
 end
 
 minetest.register_node("anvil:anvil", {
+	-- Creates the block called Anvil
 	description = "Anvil",
 	paramtype = "light",
 	paramtype2 = "facedir",
@@ -195,15 +205,16 @@ minetest.register_node("anvil:anvil", {
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-1/4, 0.1, -1/2, 1/4, 1/2, 1/2},
-			{-1/5, -1/4, -1/4, 1/5, 0.1, 1/4},
-			{-1/3, -1/2, -1/3, 1/3, -1/4, 1/3},
+			{-1/4,  0.1, -1/2,  1/4,  1/2,  1/2},
+			{-1/5, -1/4, -1/4,  1/5,  0.1,  1/4},
+			{-1/3, -1/2, -1/3,  1/3, -1/4,  1/3},
 		},
 	},
 	sunlight_propagates = true,
 	is_ground_content = false,
-	groups = {cracky=1, falling_node = 1},
+	groups = {cracky = 1, falling_node = 1},
 	tiles = {"anvil_node.png"},
+
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", anvil.get_formspec())
@@ -212,19 +223,22 @@ minetest.register_node("anvil:anvil", {
 		inv:set_size('dst', 1)
 		inv:set_size('res', 1)
 	end,
+
 	allow_metadata_inventory_put = allow_metadata_inventory_put,
 	allow_metadata_inventory_move = allow_metadata_inventory_move,
 	allow_metadata_inventory_take = allow_metadata_inventory_take,
+
 	on_metadata_inventory_move = anvil.on_put,
 	on_metadata_inventory_put = anvil.on_put,
 	on_metadata_inventory_take = anvil.on_take
 })
 
 minetest.register_craft({
+	-- Creates the recipe for the anvil
 	output = "anvil:anvil",
 	recipe = {
-		{"default:steelblock", "default:steelblock", "default:steelblock"},
-		{"", "default:steel_ingot", ""},
-		{"default:steel_ingot", "default:steel_ingot", "default:steel_ingot"}
+		{ "default:steelblock"  , "default:steelblock"  , "default:steelblock"  },
+		{ ""                    , "default:steel_ingot" , ""                    },
+		{ "default:steel_ingot" , "default:steel_ingot" , "default:steel_ingot" }
 	}
 })
